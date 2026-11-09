@@ -58,19 +58,21 @@ function clickAt(idx) {
   save();
 }
 
-let pressTimer = null, suppress = false;
+let pressTimer = null, suppress = false, pressed = null; // pressed: tile idx where a canvas pointerdown began
 canvas.addEventListener('pointerdown', e => {
   if (e.button !== 0) return;
   suppress = false;
-  const idx = pos(e);
+  const idx = pressed = pos(e);
   clearTimeout(pressTimer);
   if (e.pointerType !== 'mouse') pressTimer = setTimeout(() => { suppress = true; removeAt(idx); }, 600);
 });
 canvas.addEventListener('pointerup', e => {
   clearTimeout(pressTimer);
-  if (e.button === 0 && !suppress) clickAt(pos(e));
+  const idx = pos(e), start = pressed;
+  pressed = null;
+  if (e.button === 0 && !suppress && start !== null && idx === start) clickAt(idx);
 });
-canvas.addEventListener('pointercancel', () => clearTimeout(pressTimer));
+canvas.addEventListener('pointercancel', () => { clearTimeout(pressTimer); pressed = null; });
 canvas.addEventListener('contextmenu', e => {
   e.preventDefault();
   suppress = true; clearTimeout(pressTimer);
