@@ -17,4 +17,4 @@ document.getElementById('start').addEventListener('click', async () => {
     const now = Date.now();
     return voicesAt(state, step, now, isFullMoon(now));
   });
-});
+}, { once: true });

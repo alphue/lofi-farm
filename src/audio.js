@@ -53,7 +53,7 @@ export function createAudio() {
 
   function noise(t, peak, a, len, filterType, freq) {
     const src = ctx.createBufferSource();
-    src.buffer = noiseBuf;
+    src.buffer = noiseBuf; src.loop = true;
     const f = ctx.createBiquadFilter();
     f.type = filterType; f.frequency.value = freq;
     src.connect(f).connect(env(t, peak, a, len));
@@ -71,7 +71,7 @@ export function createAudio() {
         o.detune.value = (Math.random() - 0.5) * 12; // tape-ish wobble
         o.connect(env(when, v.gain * tone.g, tone.a, tone.len));
         o.start(when); o.stop(when + tone.len + 0.05);
-      } else if (v.role === 'hats') noise(when, v.gain * 0.5, 0.005, 0.07, 'highpass', 6000);
+      } else if (v.role === 'hats') noise(when, v.gain * 0.5, 0.005, 0.07, 'highpass', 3000);
       else if (v.role === 'texture') noise(when, v.gain * 0.6, 0.8, 1.8, 'lowpass', 900);
     }
   }
