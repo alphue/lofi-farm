@@ -1,0 +1,1 @@
+{ "name": "lofi-farm", "type": "module", "scripts": { "test": "node --test" } }
