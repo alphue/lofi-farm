@@ -1,7 +1,7 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { newState, growth, plant, harvest, remove, serialize, load } from '../src/state.js';
-import { SPECIES } from '../src/plants.js';
+import { SPECIES, START_SPECIES } from '../src/plants.js';
 
 test('new state has 24 empty tiles and 4 unlocked species', () => {
   const s = newState(0);
@@ -70,4 +70,11 @@ test('load drops unknown species from tiles and unlocked', () => {
   const s = load(JSON.stringify({ version: 1, grid, unlocked: ['wheat', 'dragonfruit'] }), 0);
   assert.equal(s.grid[0], null);
   assert.deepEqual(s.unlocked, ['wheat']);
+});
+test('load: empty/unknown-only unlocked falls back to START_SPECIES, dupes removed', () => {
+  const grid = Array(24).fill(null);
+  const u = unlocked => load(JSON.stringify({ version: 1, grid, unlocked }), 0).unlocked;
+  assert.deepEqual(u([]), [...START_SPECIES]);
+  assert.deepEqual(u(['dragonfruit']), [...START_SPECIES]);
+  assert.deepEqual(u(['wheat', 'wheat']), ['wheat']);
 });

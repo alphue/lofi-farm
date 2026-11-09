@@ -29,14 +29,13 @@ export function voicesAt(state, step, nowMs, fullMoon) {
   state.grid.forEach((tile, idx) => {
     if (!tile) return;
     const g = growth(tile, nowMs);
-    if (g < 0.1) return;
+    if (g < 0.02) return;
     const role = SPECIES[tile.species].role;
-    if (role === 'pad' && !fullMoon) return;
     const r = ROLES[role], col = idx % COLS, row = Math.floor(idx / COLS);
     if (!r.pat[(((step - col) % 8) + 8) % 8]) return;
     let midi = null;
-    if (r.shift !== null) midi = chord[row % 4] + r.shift + (role === 'bell' && fullMoon ? 12 : 0);
-    voices.push({ idx, role, midi, gain: g * r.gain });
+    if (r.shift !== null) midi = chord[row % 4] + r.shift + (fullMoon && (role === 'bell' || role === 'pad') ? 12 : 0);
+    voices.push({ idx, role, midi, gain: r.gain * (0.35 + 0.65 * g) * (role === 'pad' && fullMoon ? 1.5 : 1) });
   });
   const sum = voices.reduce((a, v) => a + v.gain, 0);
   if (sum > 1) voices.forEach(v => { v.gain /= sum; });

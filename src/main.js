@@ -118,4 +118,3 @@ function frame() {
   requestAnimationFrame(frame);
 }
 frame();
-setInterval(save, 30_000);

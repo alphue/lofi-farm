@@ -54,9 +54,10 @@ export function load(text, nowMs) {
   if (!data || data.version !== 1 || !Array.isArray(data.grid) || data.grid.length !== COLS * ROWS)
     return newState(nowMs);
   const known = id => Object.hasOwn(SPECIES, id);
+  const unlocked = [...new Set(Array.isArray(data.unlocked) ? data.unlocked.filter(known) : [])];
   return {
     version: 1,
     grid: data.grid.map(t => (t && known(t.species) && Number.isFinite(t.plantedAt) ? t : null)),
-    unlocked: Array.isArray(data.unlocked) ? data.unlocked.filter(known) : [...START_SPECIES],
+    unlocked: unlocked.length ? unlocked : [...START_SPECIES],
   };
 }
