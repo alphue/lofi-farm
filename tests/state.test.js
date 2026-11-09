@@ -59,6 +59,12 @@ for (const bad of [null, '', '{', '{"version":2}', '{"version":1,"grid":[]}'])
   test(`corrupt save ${JSON.stringify(bad)} gives fresh farm`, () => {
     assert.deepEqual(load(bad, 0), newState(0));
   });
+test('load drops tiles with invalid plantedAt', () => {
+  const grid = [{ species: 'wheat' }, { species: 'wheat', plantedAt: 'x' }, ...Array(22).fill(null)];
+  const s = load(JSON.stringify({ version: 1, grid, unlocked: ['wheat'] }), 0);
+  assert.equal(s.grid[0], null);
+  assert.equal(s.grid[1], null);
+});
 test('load drops unknown species from tiles and unlocked', () => {
   const grid = [{ species: 'dragonfruit', plantedAt: 0 }, ...Array(23).fill(null)];
   const s = load(JSON.stringify({ version: 1, grid, unlocked: ['wheat', 'dragonfruit'] }), 0);

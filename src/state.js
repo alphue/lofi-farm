@@ -56,7 +56,7 @@ export function load(text, nowMs) {
   const known = id => Object.hasOwn(SPECIES, id);
   return {
     version: 1,
-    grid: data.grid.map(t => (t && known(t.species) ? t : null)),
+    grid: data.grid.map(t => (t && known(t.species) && Number.isFinite(t.plantedAt) ? t : null)),
     unlocked: Array.isArray(data.unlocked) ? data.unlocked.filter(known) : [...START_SPECIES],
   };
 }
