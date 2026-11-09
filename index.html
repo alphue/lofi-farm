@@ -6,15 +6,23 @@
 <title>Lofi Çiftlik</title>
 <style>
   html, body { margin: 0; height: 100%; background: #0e1220; overflow: hidden; }
-  canvas { display: block; width: 100%; height: 100%; }
-  #overlay { position: fixed; inset: 0; display: flex; align-items: center; justify-content: center; background: #0e1220; }
+  canvas { display: block; width: 100%; height: 100%; touch-action: none; -webkit-touch-callout: none; user-select: none; }
+  #seeds { position: fixed; left: 0; right: 0; bottom: 0; height: 76px; box-sizing: border-box; padding: 10px 12px; display: flex; gap: 8px; overflow-x: auto; align-items: center; background: rgba(14,18,32,.85); }
+  #seeds button { flex: none; font: 15px system-ui, sans-serif; color: #e8e4d8; background: #232a45; border: 2px solid; border-radius: 10px; padding: 10px 14px; cursor: pointer; opacity: .7; }
+  #seeds button.sel { opacity: 1; background: #343b64; }
+  #toast { position: fixed; left: 50%; bottom: 92px; transform: translateX(-50%); font: 16px system-ui, sans-serif; color: #e8e4d8; background: rgba(42,48,80,.92); border-radius: 10px; padding: 10px 18px; opacity: 0; transition: opacity .6s; pointer-events: none; white-space: nowrap; }
+  #toast.show { opacity: 1; }
+  #overlay { position: fixed; inset: 0; display: flex; align-items: center; justify-content: center; background: rgba(14,18,32,.8); }
   #overlay[hidden] { display: none; }
   #start { font: 20px system-ui, sans-serif; color: #e8e4d8; background: #2a3050; border: 1px solid #4a5280; border-radius: 12px; padding: 14px 36px; cursor: pointer; }
   #start:hover { background: #343b64; }
+  #start:disabled { opacity: .6; cursor: default; }
 </style>
 </head>
 <body>
 <canvas id="game"></canvas>
+<div id="seeds"></div>
+<div id="toast"></div>
 <div id="overlay"><button id="start">Başla</button></div>
 <script type="module" src="src/main.js"></script>
 </body>
